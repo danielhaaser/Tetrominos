@@ -67,6 +67,10 @@
 		654E59361B4498E4004CCACF /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 654E59331B4498E4004CCACF /* SceneManager.cpp */; };
 		654E59391B44A491004CCACF /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 654E59371B44A491004CCACF /* Grid.cpp */; };
 		654E593A1B44A491004CCACF /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 654E59371B44A491004CCACF /* Grid.cpp */; };
+		654E593D1B44A86D004CCACF /* Tetromino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 654E593B1B44A86D004CCACF /* Tetromino.cpp */; };
+		654E593E1B44A86D004CCACF /* Tetromino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 654E593B1B44A86D004CCACF /* Tetromino.cpp */; };
+		654E59411B44AFDE004CCACF /* Coordinate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 654E593F1B44AFDE004CCACF /* Coordinate.cpp */; };
+		654E59421B44AFDE004CCACF /* Coordinate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 654E593F1B44AFDE004CCACF /* Coordinate.cpp */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -168,6 +172,10 @@
 		654E59341B4498E4004CCACF /* SceneManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneManager.h; sourceTree = "<group>"; };
 		654E59371B44A491004CCACF /* Grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grid.cpp; sourceTree = "<group>"; };
 		654E59381B44A491004CCACF /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
+		654E593B1B44A86D004CCACF /* Tetromino.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tetromino.cpp; sourceTree = "<group>"; };
+		654E593C1B44A86D004CCACF /* Tetromino.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tetromino.h; sourceTree = "<group>"; };
+		654E593F1B44AFDE004CCACF /* Coordinate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Coordinate.cpp; sourceTree = "<group>"; };
+		654E59401B44AFDE004CCACF /* Coordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Coordinate.h; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -313,6 +321,10 @@
 				654E59301B448614004CCACF /* GameScene.h */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
+				654E593B1B44A86D004CCACF /* Tetromino.cpp */,
+				654E593C1B44A86D004CCACF /* Tetromino.h */,
+				654E593F1B44AFDE004CCACF /* Coordinate.cpp */,
+				654E59401B44AFDE004CCACF /* Coordinate.h */,
 				46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */,
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
 				654E592A1B447DDE004CCACF /* Lobby.cpp */,
@@ -525,7 +537,9 @@
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				654E59311B448614004CCACF /* GameScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				654E59411B44AFDE004CCACF /* Coordinate.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				654E593D1B44A86D004CCACF /* Tetromino.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,12 +548,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				654E59321B448614004CCACF /* GameScene.cpp in Sources */,
+				654E59421B44AFDE004CCACF /* Coordinate.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				654E59361B4498E4004CCACF /* SceneManager.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				654E592D1B447DDE004CCACF /* Lobby.cpp in Sources */,
 				654E593A1B44A491004CCACF /* Grid.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				654E593E1B44A86D004CCACF /* Tetromino.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

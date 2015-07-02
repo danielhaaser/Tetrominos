@@ -19,6 +19,7 @@ public:
     CREATE_FUNC(Grid);
     
     void rotateActiveTetromino();
+    void spawnTetromino(Tetromino* tetromino);
     
 private:
     Tetromino* activeTetromino;

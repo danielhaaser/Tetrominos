@@ -26,6 +26,7 @@ bool GameScene::init()
     LayerColor* background = LayerColor::create(Color4B(255, 255, 255, 255));
     this->addChild(background);
     this->tetrominoBag = std::unique_ptr<TetrominoBag>(new TetrominoBag());
+    this->active = false;
     
     return true;
 }
@@ -54,6 +55,8 @@ void GameScene::onEnter()
     this->addChild(backButton);
     
     this->setupTouchHandling();
+    
+    this->setGameActive(true);
 }
 
 void GameScene::setupTouchHandling()
@@ -86,6 +89,25 @@ Tetromino* GameScene::createRandomTetromino()
     Tetromino* newTetromino = Tetromino::createWithType(tetrominoType);
     
     return newTetromino;
+}
+
+void GameScene::setGameActive(bool active)
+{
+    this->active = active;
+    
+    if (active)
+    {
+        this->schedule(CC_SCHEDULE_SELECTOR(GameScene::step), INITIAL_STEP_INTERVAL);
+    }
+    else
+    {
+        this->unschedule(CC_SCHEDULE_SELECTOR(GameScene::step));
+    }
+}
+
+void GameScene::step(float dt)
+{
+    this->grid->step();
 }
 
 #pragma mark -

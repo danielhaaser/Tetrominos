@@ -20,6 +20,9 @@ public:
     
     void rotate(bool right);
     
+    int getHighestYCoordinate();
+    int getWidthInBlocks();
+    
 private:
     TetrominoType type;
     std::vector<std::vector<Coordinate>> rotations;

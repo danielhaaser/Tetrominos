@@ -88,6 +88,18 @@ Coordinate Grid::getActiveTetrominoCoordinate()
     return this->activeTetrominoCoordinate;
 }
 
+Size Grid::getBlockSize()
+{
+    Size contentSize = this->getContentSize();
+    Size blockSize = Size(contentSize.width / float(GRID_WIDTH), contentSize.height / float(GRID_HEIGHT));
+    return blockSize;
+}
+
+Tetromino* Grid::getActiveTetromino()
+{
+    return this->activeTetromino;
+}
+
 #pragma mark -
 #pragma mark Private Methods
 

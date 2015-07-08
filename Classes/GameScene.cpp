@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "Grid.h"
 #include "Tetromino.h"
+#include "Coordinate.h"
 
 using namespace cocos2d;
 
@@ -63,14 +64,59 @@ void GameScene::setupTouchHandling()
 {
     auto touchListener = EventListenerTouchOneByOne::create();
     
+    static Vec2 firstTouchPos;
+    static Vec2 lastTouchPos;
+    static bool allowRotate = true;
+    
     touchListener->onTouchBegan = [&](Touch* touch, Event* event)
     {
+        allowRotate = true;
+        firstTouchPos = this->convertTouchToNodeSpace(touch);
+        lastTouchPos = firstTouchPos;
         return true;
+    };
+    
+    touchListener->onTouchMoved = [&](Touch* touch, Event* event)
+    {
+        Vec2 touchPos = this->convertTouchToNodeSpace(touch);
+        
+        Vec2 difference = touchPos - lastTouchPos;
+
+        Tetromino* activeTetromino = grid->getActiveTetromino();
+        
+        if (activeTetromino)
+        {
+            Coordinate touchCoordinate = this->convertPositionToCoordinate(touchPos);
+            Coordinate differenceCoordinate = this->convertPositionToCoordinate(difference);
+            Coordinate activeTetrominoCoordinate = grid->getActiveTetrominoCoordinate();
+            
+            if (abs(differenceCoordinate.x) >= 1)
+            {
+                
+                Coordinate newTetrominoCoordinate;
+                
+                bool movingRight = (differenceCoordinate.x > 0);
+                
+                newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + (movingRight ? 1 : -1), activeTetrominoCoordinate.y);
+                
+                grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
+                allowRotate = false;
+                lastTouchPos = touchPos;
+            }
+        }
     };
     
     touchListener->onTouchEnded = [&](Touch* touch, Event* event)
     {
-        grid->rotateActiveTetromino();
+        Vec2 touchEndPos = this->convertTouchToNodeSpace(touch);
+        
+        float distance = touchEndPos.distance(firstTouchPos);
+        Size blockSize = this->grid->getBlockSize();
+        
+        if (distance < blockSize.width && allowRotate)
+        {
+            grid->rotateActiveTetromino();
+        }
     };
     
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
@@ -119,4 +165,14 @@ void GameScene::backButtonPressed(cocos2d::Ref *pSender, cocos2d::ui::Widget::To
     {
         SceneManager::getInstance()->returnToLobby();
     }
+}
+
+#pragma mark -
+#pragma mark Utility Methods
+
+Coordinate GameScene::convertPositionToCoordinate(Vec2 position)
+{
+    Size blockSize = this->grid->getBlockSize();
+    
+    return Coordinate(position.x / blockSize.width, position.y / blockSize.height);
 }

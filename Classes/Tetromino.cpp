@@ -48,7 +48,7 @@ bool Tetromino::initWithType(TetrominoType type)
     this->rotations = tetrominoState.rotations;
     
     this->blocks = std::vector<Sprite*>();
-    this->blocks.reserve(4);
+    this->blocks.reserve(BLOCKS_PER_TETROMINO);
     
     this->rotationIndex = 0;
     
@@ -112,7 +112,7 @@ void Tetromino::rotate(bool right)
 
 int Tetromino::getHighestYCoordinate()
 {
-    auto coordinates = rotations[rotationIndex];
+    auto coordinates = this->getCurrentRotation();
     
     int highest = 0;
     
@@ -129,7 +129,7 @@ int Tetromino::getHighestYCoordinate()
 
 int Tetromino::getWidthInBlocks()
 {
-    auto coordinates = rotations[rotationIndex];
+    auto coordinates = this->getCurrentRotation();
     
     int rightMost = 0;
     int leftMost = GRID_SIZE;
@@ -152,7 +152,7 @@ int Tetromino::getWidthInBlocks()
 
 int Tetromino::getMinimumXCoordinate()
 {
-    auto coordinates = rotations[rotationIndex];
+    auto coordinates = this->getCurrentRotation();
     
     int leftMost = GRID_SIZE;
     
@@ -174,7 +174,7 @@ std::vector<int> Tetromino::getSkirt()
     
     std::vector<int> skirt = std::vector<int>(width, GRID_SIZE - 1);
     
-    auto coordinates = rotations[rotationIndex];
+    auto coordinates = this->getCurrentRotation();
     
     for (Coordinate coordinate : coordinates)
     {
@@ -188,4 +188,14 @@ std::vector<int> Tetromino::getSkirt()
     }
     
     return skirt;
+}
+
+std::vector<Sprite*> Tetromino::getBlocks()
+{
+    return blocks;
+}
+
+std::vector<Coordinate> Tetromino::getCurrentRotation()
+{
+    return rotations[rotationIndex];
 }

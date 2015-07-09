@@ -124,7 +124,6 @@ void GameScene::setupTouchHandling()
         }
         else
         {
-         
             Vec2 difference = touchEndPos - firstTouchPos; // maybe use firstTouchPos?
             std::clock_t clockDifference = clock() - touchStartedTime;
             
@@ -139,6 +138,7 @@ void GameScene::setupTouchHandling()
             if (velocity > DROP_VELOCITY)
             {
                 CCLOG("DROP! Velocity was %f", velocity);
+                // TODO: Implement tetromino dropping
             }
         }
     };

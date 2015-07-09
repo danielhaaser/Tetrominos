@@ -11,6 +11,7 @@
 #include "Grid.h"
 #include "Tetromino.h"
 #include "Coordinate.h"
+#include <time.h>
 
 using namespace cocos2d;
 
@@ -67,37 +68,42 @@ void GameScene::setupTouchHandling()
     static Vec2 firstTouchPos;
     static Vec2 lastTouchPos;
     static bool allowRotate = true;
+    static std::clock_t touchStartedTime;
     
     touchListener->onTouchBegan = [&](Touch* touch, Event* event)
     {
         allowRotate = true;
         firstTouchPos = this->convertTouchToNodeSpace(touch);
         lastTouchPos = firstTouchPos;
+        touchStartedTime = clock();
         return true;
     };
     
     touchListener->onTouchMoved = [&](Touch* touch, Event* event)
     {
         Vec2 touchPos = this->convertTouchToNodeSpace(touch);
-        
         Vec2 difference = touchPos - lastTouchPos;
 
         Tetromino* activeTetromino = grid->getActiveTetromino();
         
         if (activeTetromino)
         {
-            Coordinate touchCoordinate = this->convertPositionToCoordinate(touchPos);
             Coordinate differenceCoordinate = this->convertPositionToCoordinate(difference);
             Coordinate activeTetrominoCoordinate = grid->getActiveTetrominoCoordinate();
             
-            if (abs(differenceCoordinate.x) >= 1)
+            if (differenceCoordinate.y <= -1)
             {
+                Coordinate newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x, activeTetrominoCoordinate.y - 1);
                 
-                Coordinate newTetrominoCoordinate;
+                grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
                 
+                lastTouchPos = touchPos;
+            }
+            else if (abs(differenceCoordinate.x) >= 1)
+            {
                 bool movingRight = (differenceCoordinate.x > 0);
                 
-                newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + (movingRight ? 1 : -1), activeTetrominoCoordinate.y);
+                Coordinate newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + (movingRight ? 1 : -1), activeTetrominoCoordinate.y);
                 
                 grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
                 allowRotate = false;
@@ -109,13 +115,31 @@ void GameScene::setupTouchHandling()
     touchListener->onTouchEnded = [&](Touch* touch, Event* event)
     {
         Vec2 touchEndPos = this->convertTouchToNodeSpace(touch);
-        
         float distance = touchEndPos.distance(firstTouchPos);
         Size blockSize = this->grid->getBlockSize();
         
         if (distance < blockSize.width && allowRotate)
         {
             grid->rotateActiveTetromino();
+        }
+        else
+        {
+         
+            Vec2 difference = touchEndPos - firstTouchPos; // maybe use firstTouchPos?
+            std::clock_t clockDifference = clock() - touchStartedTime;
+            
+            if (clockDifference <= 0)
+            {
+                return;
+            }
+            
+            float touchDuration = (float) (clockDifference) / CLOCKS_PER_SEC;
+            float velocity = fabsf(difference.y / touchDuration);
+            
+            if (velocity > DROP_VELOCITY)
+            {
+                CCLOG("DROP! Velocity was %f", velocity);
+            }
         }
     };
     

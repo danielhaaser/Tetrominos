@@ -136,7 +136,7 @@ int Tetromino::getWidthInBlocks()
     
     for (Coordinate coordinate : coordinates)
     {
-        if (coordinate.x < leftMost);
+        if (coordinate.x < leftMost)  // NO SEMICOLON!!!!!
         {
             leftMost = coordinate.x;
         }
@@ -148,4 +148,44 @@ int Tetromino::getWidthInBlocks()
     }
     
     return rightMost - leftMost + 1;
+}
+
+int Tetromino::getMinimumXCoordinate()
+{
+    auto coordinates = rotations[rotationIndex];
+    
+    int leftMost = GRID_SIZE;
+    
+    for (Coordinate coordinate : coordinates)
+    {
+        if (coordinate.x < leftMost)
+        {
+            leftMost = coordinate.x;
+        }
+    }
+    
+    return leftMost;
+}
+
+std::vector<int> Tetromino::getSkirt()
+{
+    int width = this->getWidthInBlocks();
+    int skirtStart = this->getMinimumXCoordinate();
+    
+    std::vector<int> skirt = std::vector<int>(width, GRID_SIZE - 1);
+    
+    auto coordinates = rotations[rotationIndex];
+    
+    for (Coordinate coordinate : coordinates)
+    {
+        int x = coordinate.x - skirtStart;
+        int skirtY = skirt[x];
+        
+        if (coordinate.y < skirtY)
+        {
+            skirt[x] = coordinate.y;
+        }
+    }
+    
+    return skirt;
 }

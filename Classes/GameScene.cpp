@@ -111,31 +111,35 @@ void GameScene::setupTouchHandling()
     
     touchListener->onTouchEnded = [&](Touch* touch, Event* event)
     {
-        Vec2 touchEndPos = this->convertTouchToNodeSpace(touch);
-        float distance = touchEndPos.distance(firstTouchPos);
-        Size blockSize = this->grid->getBlockSize();
-        
-        if (distance < blockSize.width && allowRotate)
+        if (this->grid->getActiveTetromino())
         {
-            grid->rotateActiveTetromino();
-        }
-        else
-        {
-            Vec2 difference = touchEndPos - firstTouchPos; // maybe use firstTouchPos?
-            std::clock_t clockDifference = clock() - touchStartedTime;
+            Vec2 touchEndPos = this->convertTouchToNodeSpace(touch);
+            float distance = touchEndPos.distance(firstTouchPos);
+            Size blockSize = this->grid->getBlockSize();
             
-            if (clockDifference <= 0)
+            if (distance < blockSize.width && allowRotate)
             {
-                return;
+                grid->rotateActiveTetromino();
             }
-            
-            float touchDuration = (float) (clockDifference) / CLOCKS_PER_SEC;
-            float velocity = fabsf(difference.y / touchDuration);
-            
-            if (velocity > DROP_VELOCITY)
+            else
             {
-                CCLOG("DROP! Velocity was %f", velocity);
-                // TODO: Implement tetromino dropping
+                Vec2 difference = touchEndPos - firstTouchPos; // maybe use firstTouchPos?
+                std::clock_t clockDifference = clock() - touchStartedTime;
+                
+                if (clockDifference <= 0)
+                {
+                    return;
+                }
+                
+                float touchDuration = (float) (clockDifference) / CLOCKS_PER_SEC;
+                float velocity = fabsf(difference.y / touchDuration);
+                
+                if (velocity > DROP_VELOCITY)
+                {
+                    CCLOG("DROP! Velocity was %f", velocity);
+                    this->grid->dropActiveTetromino();
+                    
+                }
             }
         }
     };

@@ -54,6 +54,14 @@ void Grid::rotateActiveTetromino()
     }
 }
 
+void Grid::dropActiveTetromino()
+{
+    Coordinate landingCoordinate = this->getTetrominoLandingCoordinate();
+    
+    this->setActiveTetrominoCoordinate(landingCoordinate);
+    this->deactivateTetromino(activeTetromino, activeTetrominoCoordinate);
+}
+
 void Grid::spawnTetromino(Tetromino *tetromino)
 {
     this->activeTetromino = tetromino;
@@ -166,6 +174,8 @@ void Grid::deactivateTetromino(Tetromino* tetromino, Coordinate tetrominoCoordin
     this->activeTetromino->removeFromParent();
     
     this->activeTetromino = nullptr;
+    
+    this->clearLines();
 }
 
 void Grid::placeTetrominoOnBoard(Tetromino *tetromino, Coordinate tetrominoCoordinate)
@@ -200,6 +210,76 @@ void Grid::placeTetrominoOnBoard(Tetromino *tetromino, Coordinate tetrominoCoord
         
         // add the block to blocksLanded
         blocksLanded[globalCoordinate.y][globalCoordinate.x] = block;
+    }
+}
+
+Coordinate Grid::getTetrominoLandingCoordinate()
+{
+    bool collided = false;
+    Coordinate landingCoordinate = this->getActiveTetrominoCoordinate();
+    
+    while (!collided)
+    {
+        landingCoordinate.y--;
+        
+        if (this->checkIfTetrominoCollides(activeTetromino, landingCoordinate))
+        {
+            landingCoordinate.y++;
+            collided = true;
+        }
+    }
+    
+    return landingCoordinate;
+}
+
+void Grid::clearLines()
+{
+    for (int y = 0; y < GRID_HEIGHT; ++y)
+    {
+        // check if all the blocks in a row are filled
+        bool fullLine = true;
+        std::vector<Sprite*> row = blocksLanded[y];
+        
+        for (int x = 0; x < GRID_WIDTH; ++x)
+        {
+            if (!row[x])
+            {
+                fullLine = false;
+                break;
+            }
+        }
+        
+        // clear the line if filled
+        if (fullLine)
+        {
+            // remove the block sprites from grid and blocksLanded
+            for (Sprite* block : row)
+            {
+                block->removeFromParent();
+            }
+            
+            blocksLanded.erase(blocksLanded.begin() + y);
+            
+            // move blocks in all rows above down one y coordinate
+            
+            std::vector<std::vector<Sprite*>> rowsToMoveDown(blocksLanded.begin() + y, blocksLanded.end());
+            
+            for (std::vector<Sprite*> rowAbove : rowsToMoveDown)
+            {
+                for (Sprite* block : rowAbove)
+                {
+                    if (block)
+                    {
+                        block->setPositionY(block->getPosition().y - block->getContentSize().height);
+                    }
+                }
+            }
+            
+            std::vector<Sprite*> newRow(GRID_WIDTH, nullptr);
+            blocksLanded.push_back(newRow);
+            
+            y--;
+        }
     }
 }
 

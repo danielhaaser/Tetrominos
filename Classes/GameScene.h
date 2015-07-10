@@ -28,6 +28,7 @@ protected:
     bool active;
     cocos2d::ui::Text* scoreLabel;
     int totalScore;
+    float stepInterval;
     
     // Lifecycle
     bool init() override;
@@ -39,6 +40,7 @@ protected:
     void setGameActive(bool active);
     void step(float dt);
     void updateStateFromScore();
+    void updateGameSpeed(int score);
     
     // Utility
     Coordinate convertPositionToCoordinate(cocos2d::Vec2 position);

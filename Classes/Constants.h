@@ -15,6 +15,9 @@ static const int GRID_HEIGHT = 20;
 static const int BLOCKS_PER_TETROMINO = 4;
 
 static const float INITIAL_STEP_INTERVAL = 1.0f;
+static const int SCORE_TO_ACCELERATE = 5;
+static const float ACCELERATION_FACTOR = 0.9f;
+static const float SPEED_MAX = 0.1f;
 
 static const float DROP_VELOCITY = 10000.0f;
 

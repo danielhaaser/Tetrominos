@@ -20,6 +20,7 @@ public:
     
     void rotate(bool right);
     
+    TetrominoType getTetrominoType();
     int getHighestYCoordinate();
     int getWidthInBlocks();
     int getMinimumXCoordinate();

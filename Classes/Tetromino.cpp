@@ -190,6 +190,11 @@ std::vector<int> Tetromino::getSkirt()
     return skirt;
 }
 
+TetrominoType Tetromino::getTetrominoType()
+{
+    return this->type;
+}
+
 std::vector<Sprite*> Tetromino::getBlocks()
 {
     return blocks;

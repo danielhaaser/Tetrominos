@@ -8,6 +8,7 @@
 
 #include "Grid.h"
 #include "Tetromino.h"
+#include "UIConstants.h"
 
 using namespace cocos2d;
 
@@ -23,6 +24,8 @@ bool Grid::init()
     
     this->activeTetromino = nullptr;
     this->activeTetrominoCoordinate = Coordinate();
+    this->score = 0;
+    this->totalLinesCleared = 0;
     
     for (int index = 0; index < GRID_HEIGHT; ++index)
     {
@@ -87,7 +90,7 @@ void Grid::spawnTetromino(Tetromino *tetromino)
     this->ghostTetromino = Tetromino::createWithType(type);
     
     this->ghostTetromino->setCascadeOpacityEnabled(true);
-    this->ghostTetromino->setOpacity(70);
+    this->ghostTetromino->setOpacity(GHOST_TETROMINO_OPACITY);
     this->updateGhostTetrominoPosition();
     
     this->addChild(ghostTetromino);
@@ -145,6 +148,16 @@ Size Grid::getBlockSize()
 Tetromino* Grid::getActiveTetromino()
 {
     return this->activeTetromino;
+}
+
+int Grid::getScore()
+{
+    return this->score;
+}
+
+int Grid::getTotalLinesCleared()
+{
+    return this->totalLinesCleared;
 }
 
 #pragma mark -
@@ -253,6 +266,8 @@ Coordinate Grid::getTetrominoLandingCoordinate()
 
 void Grid::clearLines()
 {
+    int linesCleared = 0;
+    
     for (int y = 0; y < GRID_HEIGHT; ++y)
     {
         // check if all the blocks in a row are filled
@@ -294,12 +309,17 @@ void Grid::clearLines()
                 }
             }
             
+            linesCleared++;
+            
             std::vector<Sprite*> newRow(GRID_WIDTH, nullptr);
             blocksLanded.push_back(newRow);
             
             y--;
         }
     }
+    
+    this->totalLinesCleared += linesCleared;
+    this->updateScore(linesCleared);
 }
 
 void Grid::updateGhostTetrominoPosition()
@@ -311,6 +331,17 @@ void Grid::updateGhostTetrominoPosition()
     }
 }
 
+void Grid::updateScore(int linesCleared)
+{
+    int scoreToAdd = linesCleared;
+    
+    if (linesCleared == 4)
+    {
+        scoreToAdd = 5;
+    }
+    
+    this->score += scoreToAdd;
+}
 
 
 

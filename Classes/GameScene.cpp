@@ -32,6 +32,7 @@ bool GameScene::init()
     this->stepInterval = INITIAL_STEP_INTERVAL;
     this->active = false;
     this->totalScore = 0;
+    this->timeLeft = TIME_PER_GAME;
     
     return true;
 }
@@ -59,10 +60,16 @@ void GameScene::onEnter()
     // setup labels
     this->scoreLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
     this->scoreLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
-    this->scoreLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95f));
+    this->scoreLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.98f));
     this->scoreLabel->setColor(LABEL_COLOR);
     
+    this->timeLeftLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
+    this->timeLeftLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
+    this->timeLeftLabel->setPosition(this->scoreLabel->getPosition() - Vec2(0.0f, FONT_SIZE * 1.5f));
+    this->timeLeftLabel->setColor(LABEL_COLOR);
+    
     this->addChild(scoreLabel);
+    this->addChild(timeLeftLabel);
     
     this->setupTouchHandling();
     
@@ -180,10 +187,12 @@ void GameScene::setGameActive(bool active)
     if (active)
     {
         this->schedule(CC_SCHEDULE_SELECTOR(GameScene::step), this->stepInterval);
+        this->scheduleUpdate();
     }
     else
     {
         this->unschedule(CC_SCHEDULE_SELECTOR(GameScene::step));
+        this->unscheduleUpdate();
     }
 }
 
@@ -205,6 +214,18 @@ void GameScene::step(float dt)
     {
         this->grid->step();
         this->updateStateFromScore();
+    }
+}
+
+void GameScene::update(float dt)
+{
+    Node::update(dt);
+    
+    this->setTimeLeft(this->timeLeft - dt);
+    
+    if (this->timeLeft <= 0.0f)
+    {
+        this->gameOver();
     }
 }
 
@@ -246,6 +267,14 @@ void GameScene::gameOver()
     MessageBox(messageContent.c_str(), "Game Over");
     
     SceneManager::getInstance()->returnToLobby();
+}
+
+void GameScene::setTimeLeft(float time)
+{
+    this->timeLeft = time;
+    
+    std::string timeLeftString = StringUtils::format("%.1f", time);
+    this->timeLeftLabel->setString(timeLeftString);
 }
 
 #pragma mark -

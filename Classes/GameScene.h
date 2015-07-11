@@ -16,11 +16,15 @@
 class Coordinate;
 class Grid;
 class Tetromino;
+class PreviewGrid;
 
 class GameScene : public cocos2d::Node
 {
 public:
     CREATE_FUNC(GameScene);
+    
+    void setNetworkedSession(bool networkedSession);
+    void receivedData(const void* data, unsigned long length);
     
 protected:
     Grid* grid;
@@ -31,6 +35,9 @@ protected:
     int totalScore;
     float stepInterval;
     float timeLeft;
+    bool networkedSession;
+    bool gameIsOver;
+    PreviewGrid* previewGrid;
     
     // Lifecycle
     bool init() override;
@@ -46,6 +53,9 @@ protected:
     void updateGameSpeed(int score);
     void gameOver();
     void setTimeLeft(float time);
+    
+    // Networking
+    void sendGameStateOverNetwork();
     
     // Utility
     Coordinate convertPositionToCoordinate(cocos2d::Vec2 position);

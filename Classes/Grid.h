@@ -31,6 +31,7 @@ public:
     int getScore();
     void dropActiveTetromino();
     bool checkIfTopReached();
+    std::vector<std::vector<cocos2d::Sprite*>> getBlocksLanded();
     
 private:
     Tetromino* activeTetromino;

@@ -30,6 +30,8 @@ void Lobby::onEnter()
 {
     Node::onEnter();
     
+    SceneManager::getInstance()->receiveMultiplayerInvitations();
+    
     cocos2d::Size visibleSize = Director::getInstance()->getVisibleSize();
     
     Sprite* logo = Sprite::create("logo.png");
@@ -65,5 +67,17 @@ void Lobby::singlePlayerPressed(Ref* pSender, ui::Widget::TouchEventType eEventT
 
 void Lobby::multiplayerPressed(Ref* pSender, ui::Widget::TouchEventType eEventType)
 {
-    CCLOG("2 player!");
+    if (eEventType == ui::Widget::TouchEventType::ENDED)
+    {
+        SceneManager::getInstance()->showPeerList();
+    }
 }
+
+
+
+
+
+
+
+
+

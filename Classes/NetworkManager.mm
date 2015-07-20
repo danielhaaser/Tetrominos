@@ -37,7 +37,7 @@
 {
     self.peerID = [[MCPeerID alloc] initWithDisplayName:[UIDevice currentDevice].name];
 
-    _session = [[MCSession alloc] initWithPeer:self.peerID securityIdentity:nil encryptionPreference:MCEncryptionRequired];
+    _session = [[MCSession alloc] initWithPeer:self.peerID securityIdentity:nil encryptionPreference:MCEncryptionNone];
     _session.delegate = self;
 
     _advertiserAssistant = [[MCAdvertiserAssistant alloc] initWithServiceType:@"doodler-game" discoveryInfo:nil session:_session];
